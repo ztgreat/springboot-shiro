@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.shiro.mapper.SysMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.springboot.shiro.entity.SysMenu">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="level" property="level" />
+        <result column="parent_id" property="parentId" />
+        <result column="code" property="code" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="icon" property="icon" />
+        <result column="url" property="url" />
+        <result column="sorter" property="sorter" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, level, parent_id, code, status, create_time, update_time, icon, url, sorter
+    </sql>
+
+    <resultMap id="TreeResultMap" type="com.springboot.shiro.entity.ins.AuthMenuTreeIns">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+        <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="sorter" jdbcType="INTEGER" property="sorter" />
+        <collection property="children" column="id" select="getMenuTree" />
+    </resultMap>
+
+    <resultMap id="UserTreeResultMap" type="com.springboot.shiro.entity.ins.AuthMenuTreeIns">
+
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+        <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="sorter" jdbcType="INTEGER" property="sorter" />
+
+        <collection property="children" column="{parentId=id,userId=userId}" select="getChildMenuTree" />
+    </resultMap>
+
+
+
+    <select id="getMenuByUserId"  resultMap="BaseResultMap">
+        select sm.* from sys_menu sm
+        LEFT JOIN sys_role_menu srm on sm.id=srm.menu_id
+        LEFT JOIN sys_user_role sur on srm.role_id=sur.role_id
+        LEFT JOIN sys_user su on su.id=sur.user_id
+        where su.id=#{userId}
+
+    </select>
+
+    <select id="getMenuByRoleId"  resultMap="BaseResultMap">
+        SELECT sm.* from sys_role_menu srm
+        LEFT JOIN sys_role sr on srm.role_id= sr.id
+        LEFT JOIN sys_menu sm on sm.id=srm.menu_id
+        WHERE  sr.id=#{roleId}
+
+    </select>
+
+    <select id="getChildMenuTree" parameterType="java.util.Map" resultMap="UserTreeResultMap">
+        <!-- select * from sys_menu where parent_id = #{parentId}  ORDER BY sorter ASC -->
+
+        select DISTINCT(sm.id),su.id as userId,sm.name,sm.level,sm.parent_id,sm.code,sm.status,sm.create_time,sm.update_time,sm.icon,sm.url,sm.sorter from sys_menu sm
+        LEFT JOIN sys_role_menu srm on sm.id=srm.menu_id
+        LEFT JOIN sys_user_role sur on srm.role_id=sur.role_id
+        LEFT JOIN sys_user su on su.id=sur.user_id
+        where su.id=#{userId} and sm.parent_id=#{parentId} and sm.status='1'
+        ORDER BY sorter ASC
+
+
+    </select>
+
+    <!-- 通过用户id 得到用户自己的菜单树 -->
+    <select id="getMenuTreeByUserId" parameterType="int" resultMap="UserTreeResultMap">
+        select sm.*,su.id as userId from sys_menu  sm
+        LEFT JOIN sys_user su
+        on su.id=#{userId}
+        where sm.id in(
+        select DISTINCT(sm.id)  from sys_menu sm
+        LEFT JOIN sys_role_menu srm on sm.id=srm.menu_id
+        LEFT JOIN sys_user_role sur on srm.role_id=sur.role_id
+        LEFT JOIN sys_user su on su.id=sur.user_id
+        where su.id=#{userId} )
+        and sm.parent_id=0 and sm.status='1' ORDER BY sm.sorter ASC
+    </select>
+
+    <!-- 得到所有的权限树 -->
+    <select id="getMenuTree" parameterType="int" resultMap="TreeResultMap">
+        select * from sys_menu where parent_id = #{parentId}  ORDER BY sorter ASC
+    </select>
+
+
+</mapper>

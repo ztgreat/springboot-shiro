@@ -1,0 +1,28 @@
+
+spring:
+       # jdbc
+       datasource:
+          driverClassName: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/shiro?useUnicode=true&characterEncoding=utf-8
+          username: root
+          password: root
+       # redis
+       redis:
+         database: 0
+         host: localhost
+         port: 6379
+         password:
+         jedis:
+           pool:
+             max-active: 8
+             max-wait: -1
+             max-idle: 8
+             min-idle: 0
+         timeout: 0
+
+
+# mybatis plus
+mybatis-plus:
+         type-aliases-package: cn.ztgreat.springboot.shiro.entity
+         config-location: classpath:mybatis/mybatis-config.xml
+         mapper-locations: classpath:com/springboot/shiro/mapper/xml/*.xml
