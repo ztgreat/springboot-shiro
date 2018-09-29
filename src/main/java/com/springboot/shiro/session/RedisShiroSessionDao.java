@@ -21,8 +21,11 @@ public class RedisShiroSessionDao extends CachingSessionDAO {
 
 	@Override
 	protected Serializable doCreate(Session session) {
-		this.getCacheManager().getCache(cacheName).put(session.getId(),session);
-		return session.getId();
+
+		Serializable sessionId = this.generateSessionId(session);
+		this.assignSessionId(session, sessionId);
+		this.getCacheManager().getCache(cacheName).put(sessionId,session);
+		return sessionId;
 	}
 
 	@Override

@@ -13,16 +13,18 @@ import java.util.Set;
  */
 public class RedisShiroCache<K,V> implements Cache<K, V> {
 
-    @Autowired
     private RedisTemplate<K, V> redisTemplate;
 
     private String name;
 
-    public RedisShiroCache(){
+    public RedisShiroCache(RedisTemplate redisTemplate){
+        this.name="default";
+        this.redisTemplate = redisTemplate;
     }
 
-    public RedisShiroCache(String name){
+    public RedisShiroCache(String name,RedisTemplate redisTemplate){
         this.name =name;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override

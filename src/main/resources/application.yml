@@ -1,4 +1,5 @@
-
+server:
+  port: 9090
 spring:
        # jdbc
        datasource:
@@ -18,7 +19,6 @@ spring:
              max-wait: -1
              max-idle: 8
              min-idle: 0
-         timeout: 0
 
 
 # mybatis plus

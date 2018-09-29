@@ -10,8 +10,15 @@ import java.util.Map;
 public class UserSessionManager {
 
 
-	@Autowired
-	RedisShiroSessionDao userShiroSessionDao;
+	RedisShiroSessionDao redisShiroSessionDao;
+
+	public RedisShiroSessionDao getRedisShiroSessionDao() {
+		return redisShiroSessionDao;
+	}
+
+	public void setRedisShiroSessionDao(RedisShiroSessionDao redisShiroSessionDao) {
+		this.redisShiroSessionDao = redisShiroSessionDao;
+	}
 
 	/**
 	 * 根据ID查询 SimplePrincipalCollection
@@ -32,7 +39,7 @@ public class UserSessionManager {
 	 * @return
 	 */
 	public Session getSession(String sessionId) {
-		Session session = userShiroSessionDao.doReadSession(sessionId);
+		Session session = redisShiroSessionDao.doReadSession(sessionId);
 		return session;
 	}
 

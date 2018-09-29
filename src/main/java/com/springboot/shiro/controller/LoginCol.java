@@ -67,6 +67,7 @@ public class LoginCol {
 		} catch (DisabledAccountException e) {
 			res.setFailure("账号被禁用");
 		} catch (Exception e) {
+			e.printStackTrace();
 			res.setFailure("用户名或密码错误");
 		}
 		res.setData(su);

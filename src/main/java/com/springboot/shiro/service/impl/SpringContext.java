@@ -1,23 +1,25 @@
-package com.springboot.shiro.util;
+package com.springboot.shiro.service.impl;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  * 获取静态bean
  * 
- * @author hoxing
+ * @author ztgreat
  *
  */
-public class SpringContextUtil implements ApplicationContextAware {
+@Component
+public class SpringContext implements ApplicationContextAware {
 	private static ApplicationContext applicationContext;
 
 	// 实现
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		SpringContextUtil.applicationContext = applicationContext;
+		SpringContext.applicationContext = applicationContext;
 	}
 
 	public static ApplicationContext getApplicationContext() {

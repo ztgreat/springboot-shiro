@@ -4,7 +4,7 @@ package com.springboot.shiro.security;
 import com.springboot.shiro.entity.SysUser;
 import com.springboot.shiro.session.UserSessionManager;
 import com.springboot.shiro.util.Digests;
-import com.springboot.shiro.util.SpringContextUtil;
+import com.springboot.shiro.service.impl.SpringContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
@@ -15,9 +15,9 @@ import java.util.List;
 
 public class TokenManager {
 	//用户登录管理
-	public static final SysUserRealm realm = SpringContextUtil.getBean("userRealm",SysUserRealm.class);
+	public static final SysUserRealm realm = SpringContext.getBean("sysUserRealm",SysUserRealm.class);
 	//用户session管理
-	public static final UserSessionManager userSessionManager = SpringContextUtil.getBean("userSessionManager",UserSessionManager.class);
+	public static final UserSessionManager userSessionManager = SpringContext.getBean("userSessionManager",UserSessionManager.class);
 	/**
 	 * 获取当前登录的用户User对象
 	 * @return

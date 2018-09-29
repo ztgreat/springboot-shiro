@@ -7,11 +7,13 @@ import com.springboot.shiro.filter.RoleFilter;
 import com.springboot.shiro.security.MyPermissionResolver;
 import com.springboot.shiro.security.SysUserRealm;
 import com.springboot.shiro.session.RedisShiroSessionDao;
+import com.springboot.shiro.session.ShiroSessionFactory;
 import com.springboot.shiro.session.UserSessionManager;
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.session.mgt.SessionFactory;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
@@ -21,6 +23,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.Filter;
 import java.util.HashMap;
@@ -106,13 +109,20 @@ public class ShiroConfig {
 //        return sessionValidationScheduler;
 //    }
 
+
+
+    @Bean
+    public SessionFactory sessionFactory(){
+        return new ShiroSessionFactory();
+    }
+
     /**
      * 缓存管理器
      * @return
      */
 
     @Bean
-    public DefaultWebSessionManager sessionManager(RedisShiroSessionDao redisShiroSessionDao){
+    public DefaultWebSessionManager sessionManager(RedisShiroSessionDao redisShiroSessionDao,SessionFactory sessionFactory){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 
         //注入 sessionDao
@@ -121,6 +131,8 @@ public class ShiroConfig {
         //注入 会话验证调度器
         //sessionManager.setSessionValidationScheduler(sessionValidationScheduler);
 
+        //注入 sessionFactory
+        sessionManager.setSessionFactory(sessionFactory);
         return sessionManager;
     }
     @Bean
@@ -191,14 +203,17 @@ public class ShiroConfig {
      * @return
      */
     @Bean
-    public CacheManager cacheManager(){
-        CacheManager cacheManager = new RedisCacheManager();
+    public CacheManager cacheManager(RedisTemplate redisTemplate){
+        RedisCacheManager cacheManager = new RedisCacheManager();
+        cacheManager.setRedisTemplate(redisTemplate);
         return cacheManager;
     }
 
     @Bean
-    public UserSessionManager userSessionManager(){
-        return new UserSessionManager();
+    public UserSessionManager userSessionManager(RedisShiroSessionDao redisShiroSessionDao){
+        UserSessionManager userSessionManager = new UserSessionManager();
+        userSessionManager.setRedisShiroSessionDao(redisShiroSessionDao);
+        return userSessionManager;
     }
 
 
