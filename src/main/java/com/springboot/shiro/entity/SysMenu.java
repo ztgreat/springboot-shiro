@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author zt
- * @since 2018-09-29
+ * @since 2018-09-30
  */
 public class SysMenu extends Model<SysMenu> {
 

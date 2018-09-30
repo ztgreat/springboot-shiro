@@ -161,7 +161,7 @@ public class SysRoleCol {
 			sysRoleService.updateUserRoles(userId, roleIds);
 			res.setMsg(CommonConstant.Message.OPTION_SUCCESS);
 		} catch (RuntimeException e) {
-			res.setMsg(CommonConstant.Message.OPTION_FAILURE);
+			res.setMsg(e.getMessage());
 			LoggerUtils.error(getClass(),"[sys updateUserRoles]" + e.getMessage());
 		}
 		return res;

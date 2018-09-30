@@ -3,11 +3,11 @@ package com.springboot.shiro.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.springboot.shiro.base.CommonConstant;
 import com.springboot.shiro.entity.SysUser;
 import com.springboot.shiro.mapper.SysUserMapper;
 import com.springboot.shiro.service.SysUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.springboot.shiro.util.Digests;
 import com.springboot.shiro.util.LoggerUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +54,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public String saveUser(SysUser user) {
+    public String saveUser(SysUser user) throws  RuntimeException {
 
         Date date=new Date();
         if(user.getId()!=null){
@@ -64,10 +64,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
             user.setCreateTime(date);
             user.setModifyTime(date);
-            user.setStatus("1"); //有效
+            user.setStatus(CommonConstant.ONE); //有效
             String password= Digests.shaHex(user.getPassword(), user.getUsername());
             user.setPassword(password);
-            sysUserMapper.insert(user);
+            try {
+                sysUserMapper.insert(user);
+            }catch (Exception e){
+                throw  new RuntimeException("添加用户失败");
+            }
         }
         return "操作成功";
 
@@ -78,23 +82,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param id ,password
      * @return
      */
-    public String updateUserPwd (String password,Integer id) {
+    public String updateUserPwd (String password,Integer id) throws RuntimeException {
         SysUser user = sysUserMapper.selectById(id);
         Date date=new Date();
         user.setModifyTime(date);
         if (null != user) {
-            String encryptP=Digests.shaHex(password, user.getUsername());
-            user.setPassword(encryptP);
-            int flag = sysUserMapper.updateById(user);
-            if (flag == 0) {
-                return CommonConstant.Message.OPTION_FAILURE;
+            try {
+                String encryptP=Digests.shaHex(password, user.getUsername());
+                user.setPassword(encryptP);
+                int flag = sysUserMapper.updateById(user);
+                if (flag == 0) {
+                    return CommonConstant.Message.OPTION_FAILURE;
+                }
+            }catch (Exception e){
+                 throw  new RuntimeException("更新用户密码失败");
             }
+
         }
         return CommonConstant.Message.OPTION_SUCCESS;
     }
 
     @Override
-    public String updateLoginTime(Integer id) {
+    public String updateLoginTime(Integer id) throws  RuntimeException{
         SysUser user =new SysUser();
         user.setId(id);
         user.setLastLoginTime(new Date());
@@ -106,7 +115,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public String delete(List<Integer> ids) {
+    public String delete(List<Integer> ids) throws  RuntimeException{
         try {
             sysUserMapper.deleteBatchIds(ids);
         } catch (Exception e) {

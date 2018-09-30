@@ -71,7 +71,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
             wrapper.like(true,"name","%" + search + "%");
         }
         if(parentId!=null){
-            wrapper.eq(true,"parentId",parentId);
+            wrapper.eq(true,"parent_id",parentId);
         }
         wrapper.orderBy(true,true,"level");
         wrapper.orderBy(true,true,"id");
@@ -83,7 +83,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     public List<SysPermission> getPermissionByParentId(Integer parentId) {
         QueryWrapper<SysPermission> wrapper = new QueryWrapper<>();
         if (parentId!=null) {
-            wrapper.eq(true,"parentId",parentId);
+            wrapper.eq(true,"parent_id",parentId);
         }
         return sysPermissionMapper.selectList(wrapper);
     }
@@ -143,10 +143,13 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         }
 
         if(!needDelete.isEmpty()){
-            QueryWrapper<SysRolePermission> wrapper = new QueryWrapper<>();
-            wrapper.eq(true,"roleId", roleId);
-            wrapper.eq(true,"permId", needDelete);
-            sysRolePermissionMapper.delete(wrapper);
+            for(Integer permId:needDelete){
+                QueryWrapper<SysRolePermission> wrapper = new QueryWrapper<>();
+                wrapper.eq(true,"role_id", roleId);
+                wrapper.eq(true,"perm_id", permId);
+                sysRolePermissionMapper.delete(wrapper);
+            }
+
         }
         if(!neddAdd.isEmpty()){
             for(SysRolePermission permission:adds ){
@@ -157,7 +160,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    public String deleteBatch(List<String>ids) {
+    public String deleteBatch(List<String>ids) throws  RuntimeException{
         try {
             sysPermissionMapper.deleteBatchIds(ids);
         } catch (Exception e) {

@@ -3,10 +3,12 @@ package com.springboot.shiro.cache;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 使用redis 作为缓存器 
@@ -14,6 +16,8 @@ import java.util.Set;
 public class RedisShiroCache<K,V> implements Cache<K, V> {
 
     private RedisTemplate<K, V> redisTemplate;
+
+    private Long EXPTIMES;
 
     private String name;
 
@@ -34,7 +38,16 @@ public class RedisShiroCache<K,V> implements Cache<K, V> {
 
     @Override
     public V put(K k, V v) throws CacheException {
-        redisTemplate.opsForValue().set(k,v);
+        if(this.EXPTIMES!=null){
+            redisTemplate.opsForValue().set(k, v, this.EXPTIMES, TimeUnit.SECONDS);
+        }else {
+            redisTemplate.opsForValue().set(k, v);
+        }
+        return v;
+    }
+
+    public V put(K k, V v,Long EXPTIMES) throws CacheException {
+        redisTemplate.opsForValue().set(k, v, EXPTIMES, TimeUnit.SECONDS);
         return v;
     }
 
@@ -62,5 +75,30 @@ public class RedisShiroCache<K,V> implements Cache<K, V> {
     @Override
     public Collection<V> values() {
         return null;
+    }
+
+
+    public Long getEXPTIMES() {
+        return EXPTIMES;
+    }
+
+    public void setEXPTIMES(Long EXPTIMES) {
+        this.EXPTIMES = EXPTIMES;
+    }
+
+    public RedisTemplate<K, V> getRedisTemplate() {
+        return redisTemplate;
+    }
+
+    public void setRedisTemplate(RedisTemplate<K, V> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

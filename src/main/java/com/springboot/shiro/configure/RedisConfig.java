@@ -33,8 +33,8 @@ public class RedisConfig {
 
         // <2> 手动指定RedisTemplate的Key和Value的序列化器
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-//        redisTemplate.setValueSerializer(new RedisObjectSerializer());
+//        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setValueSerializer(new RedisObjectSerializer());
 
         redisTemplate.afterPropertiesSet();
         return redisTemplate;

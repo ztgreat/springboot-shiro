@@ -79,5 +79,5 @@ public interface SysPermissionService extends IService<SysPermission> {
      */
     public boolean updatePermission(Integer roleId, List<Integer> permissionIds)throws RuntimeException;
 
-    String deleteBatch(List<String> ids);
+    String deleteBatch(List<String> ids) throws  RuntimeException;
 }

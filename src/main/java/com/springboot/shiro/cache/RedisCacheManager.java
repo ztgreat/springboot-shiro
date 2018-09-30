@@ -13,6 +13,7 @@ public class RedisCacheManager extends AbstractCacheManager {
 
     private RedisTemplate redisTemplate;
 
+
     @Override
     protected Cache createCache(String name) throws CacheException {
         RedisShiroCache redisShiroCache = new RedisShiroCache<String,Object>(name,redisTemplate);
@@ -26,4 +27,5 @@ public class RedisCacheManager extends AbstractCacheManager {
     public void setRedisTemplate(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
+
 }

@@ -33,7 +33,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param user
      * @return
      */
-    String saveUser(SysUser user);
+    String saveUser(SysUser user) throws  RuntimeException;
 
 
     /**
@@ -41,14 +41,14 @@ public interface SysUserService extends IService<SysUser> {
      * @param id
      * @return
      */
-    String updateLoginTime(Integer id);
+    String updateLoginTime(Integer id) throws  RuntimeException;
 
     /**
      * 修改密码
      * @param id ,password
      * @return
      */
-    String updateUserPwd (String password,Integer id);
+    String updateUserPwd (String password,Integer id) throws  RuntimeException;
 
-    String delete(List<Integer> ids);
+    String delete(List<Integer> ids) throws  RuntimeException;
 }

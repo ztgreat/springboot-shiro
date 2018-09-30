@@ -86,7 +86,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param roleIds
      * @return
      */
-    public void updateUserRoles(Integer userId, List<Integer> roleIds);
+    public void updateUserRoles(Integer userId, List<Integer> roleIds) throws  RuntimeException;
 
     /**
      * 插入单个角色
@@ -95,7 +95,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param roleId
      * @return
      */
-    public void updateUserRole(String userId, String roleId);
+    public void updateUserRole(String userId, String roleId) throws  RuntimeException;
 
     /**
      * 查询单个用户角色是否存在
@@ -120,7 +120,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param userId
      * @return
      */
-    public void deleteAllRoleByUserId(int userId);
+    public void deleteAllRoleByUserId(int userId) throws  RuntimeException;
 
     /**
      * 用户角色分配页面，查询翻页总数据量

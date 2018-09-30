@@ -2,6 +2,11 @@ package com.springboot.shiro.base;
 
 
 public abstract class BaseResponseEntity {
+
+	public BaseResponseEntity() {
+		this.code = CommonConstant.ZERO;
+	}
+
 	/**
 	 * 0：成功 1：失败
 	 */

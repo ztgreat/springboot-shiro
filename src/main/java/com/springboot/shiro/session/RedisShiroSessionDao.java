@@ -1,5 +1,7 @@
 package com.springboot.shiro.session;
 
+import com.springboot.shiro.cache.RedisShiroCache;
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 
@@ -9,9 +11,33 @@ public class RedisShiroSessionDao extends CachingSessionDAO {
 
 	private String cacheName="RedisShiroSessionCache";
 
+
+
+	@Override
+	protected void cache(Session session, Serializable sessionId, Cache<Serializable, Session> cache) {
+
+		if(cache instanceof RedisShiroCache){
+			RedisShiroCache redisShiroCache = (RedisShiroCache) cache;
+			// redis 里面多保存5分钟
+			redisShiroCache.put(session.getId(),session,session.getTimeout()/1000+300);
+		}else {
+			cache.put(sessionId, session);
+		}
+	}
+
 	@Override
 	protected void doUpdate(Session session) {
-		this.getCacheManager().getCache(cacheName).put(session.getId(),session);
+		Cache cache= this.getCacheManager().getCache(cacheName);
+
+		if(cache instanceof RedisShiroCache){
+			RedisShiroCache redisShiroCache = (RedisShiroCache) cache;
+
+			// redis 里面多保存5分钟
+			redisShiroCache.put(session.getId(),session,session.getTimeout()/1000+300);
+		}else{
+			cache.put(session.getId(),session);
+		}
+
 	}
 
 	@Override
@@ -24,7 +50,16 @@ public class RedisShiroSessionDao extends CachingSessionDAO {
 
 		Serializable sessionId = this.generateSessionId(session);
 		this.assignSessionId(session, sessionId);
-		this.getCacheManager().getCache(cacheName).put(sessionId,session);
+
+		Cache cache= this.getCacheManager().getCache(cacheName);
+
+		if(cache instanceof RedisShiroCache){
+			RedisShiroCache redisShiroCache = (RedisShiroCache) cache;
+			// redis 里面多保存5分钟
+			redisShiroCache.put(sessionId,session,session.getTimeout()/1000+300);
+		}else{
+			cache.put(sessionId,session);
+		}
 		return sessionId;
 	}
 

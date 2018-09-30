@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 8080
 spring:
        # jdbc
        datasource:
@@ -20,9 +20,14 @@ spring:
              max-idle: 8
              min-idle: 0
 
+       shiro:
+         # 8小时   8*60*60*1000 =28800000
+         # 1分钟   1*60*1000 = 60000
+         globalSessionTimeout: 28800000
+
 
 # mybatis plus
 mybatis-plus:
-         type-aliases-package: cn.ztgreat.springboot.shiro.entity
+         type-aliases-package: com.springboot.shiro.entity
          config-location: classpath:mybatis/mybatis-config.xml
          mapper-locations: classpath:com/springboot/shiro/mapper/xml/*.xml

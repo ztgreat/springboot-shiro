@@ -21,6 +21,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,6 +33,10 @@ import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
+
+    //session 过期时间
+    @Value("${spring.shiro.globalSessionTimeout}")
+    private Long globalSessionTimeout;
 
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -133,6 +138,12 @@ public class ShiroConfig {
 
         //注入 sessionFactory
         sessionManager.setSessionFactory(sessionFactory);
+
+        //设置session 过期时间
+        if(this.globalSessionTimeout !=null){
+            sessionManager.setGlobalSessionTimeout(this.globalSessionTimeout);
+        }
+
         return sessionManager;
     }
     @Bean

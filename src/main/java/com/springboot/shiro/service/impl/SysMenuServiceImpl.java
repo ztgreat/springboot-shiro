@@ -1,18 +1,15 @@
 package com.springboot.shiro.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.springboot.shiro.entity.SysMenu;
 import com.springboot.shiro.entity.SysRoleMenu;
 import com.springboot.shiro.entity.ins.AuthMenuTreeIns;
 import com.springboot.shiro.mapper.SysMenuMapper;
-import com.springboot.shiro.entity.SysMenu;
 import com.springboot.shiro.mapper.SysRoleMenuMapper;
 import com.springboot.shiro.service.SysMenuService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.springboot.shiro.util.CollectionUtil;
 import com.springboot.shiro.util.LoggerUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -112,10 +109,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         if(!needDelete.isEmpty()){
 
-            QueryWrapper<SysRoleMenu> wrapper = new QueryWrapper<>();
-            wrapper.eq(true,"roleId",roleId);
-            wrapper.in(true,"menuId",needDelete);
-            sysRoleMenuMapper.delete(wrapper);
+            for(Integer menuId:needDelete){
+                QueryWrapper<SysRoleMenu> wrapper = new QueryWrapper<>();
+                wrapper.eq(true,"role_id",roleId);
+                wrapper.in(true,"menu_id",menuId);
+                sysRoleMenuMapper.delete(wrapper);
+            }
 
         }
         if(!neddAdd.isEmpty()){
@@ -142,7 +141,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             wrapper.like(true,"name","%" + search + "%");
         }
         if(parentId!=null){
-            wrapper.eq(true,"parentId", parentId);
+            wrapper.eq(true,"parent_id", parentId);
         }
         wrapper.orderBy(true,true,"level");
         wrapper.orderBy(true,true,"id");
@@ -154,7 +153,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public String deleteBatch(List<String> ids) {
+    public String deleteBatch(List<String> ids) throws  RuntimeException {
 
         try {
 

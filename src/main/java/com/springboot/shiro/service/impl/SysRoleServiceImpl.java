@@ -147,17 +147,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
-    public void updateUserRoles(Integer userId, List<Integer> roleIds) {
+    public void updateUserRoles(Integer userId, List<Integer> roleIds) throws  RuntimeException {
 
-        deleteAllRoleByUserId(userId);
-        // 事务测试
-        // if(roleIdArray.length<=1) throw new RuntimeException("test");
-        for (int i = 0; i < roleIds.size(); i++) {
-            SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setUserId(userId);
-            sysUserRole.setRoleId(roleIds.get(i));
-            sysUserRoleMapper.insert(sysUserRole);
+        try {
+            deleteAllRoleByUserId(userId);
+            for (int i = 0; i < roleIds.size(); i++) {
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setUserId(userId);
+                sysUserRole.setRoleId(roleIds.get(i));
+                sysUserRoleMapper.insert(sysUserRole);
+            }
+        }catch (Exception e){
+            throw new RuntimeException("更新用户角色失败");
         }
+
 		/*
 		 * 用户角色变更后 此处应考虑添加清空当前缓存的用户角色信息
 		 * 使用realm中的clearCachedAuthorizationInfo()方法
@@ -172,7 +175,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
-    public void updateUserRole(String userId, String roleId) {
+    public void updateUserRole(String userId, String roleId) throws  RuntimeException{
 
         // 用户角色关系是否存在标志
         boolean existFlag = false;
@@ -190,7 +193,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setUserId(Integer.parseInt(userId));
             sysUserRole.setRoleId(Integer.parseInt(roleId));
-            sysUserRoleMapper.insert(sysUserRole);
+            try {
+                sysUserRoleMapper.insert(sysUserRole);
+            }catch (Exception e){
+                throw  new RuntimeException("更新用户角色失败");
+            }
         }
 
     }
@@ -216,7 +223,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
-    public void deleteAllRoleByUserId(int userId) {
+    public void deleteAllRoleByUserId(int userId) throws  RuntimeException {
         sysRoleMapper.deleteAllRoleByUserId(userId);
     }
 

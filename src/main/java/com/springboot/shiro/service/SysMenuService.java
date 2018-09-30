@@ -82,5 +82,5 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param ids,数组
      * @return
      */
-    String deleteBatch(List<String> ids);
+    String deleteBatch(List<String> ids) throws  RuntimeException;
 }

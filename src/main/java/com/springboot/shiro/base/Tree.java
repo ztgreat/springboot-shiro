@@ -1,6 +1,5 @@
 package com.springboot.shiro.base;
 
-import java.util.Date;
 import java.util.List;
 /**
  * 菜单树
