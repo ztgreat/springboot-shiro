@@ -15,6 +15,15 @@ public class CommonConstant {
 	/** 业务校验通过 **/
 	public static final String SUCCESS = "success";
 
+	/**
+	 * 响应客户端结果
+	 */
+	public class ServerApp {
+		/** 成功 **/
+		public final static String SERVER_RET_SUSSCESS = "0";
+		/** 失败 **/
+		public final static String SERVER_RET_FAILURE = "1";
+	}
 
 	public class CacheTime {
 		/** app用户登录token缓存时间 **/

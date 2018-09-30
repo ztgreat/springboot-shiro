@@ -20,8 +20,8 @@ public class RedisObjectSerializer implements RedisSerializer<Object> {
             return null;
         }
         try {
-//            return SerializeUtil.deserialize(bytes);
-            return SerializeUtil.deserialize(bytes,Session.class);
+            return SerializeUtil.deserialize(bytes);
+//            return SerializeUtil.deserialize(bytes,Session.class);
         } catch (Exception ex) {
             throw new SerializationException("Cannot deserialize", ex);
         }

@@ -18,8 +18,6 @@ public abstract class BaseResponseEntity {
 
 	/**
 	 * 成功
-	 * 
-	 * @param msg
 	 */
 	public void setSuccess() {
 		this.code = CommonConstant.ServerApp.SERVER_RET_SUSSCESS;

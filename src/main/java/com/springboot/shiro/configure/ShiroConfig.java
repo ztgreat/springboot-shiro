@@ -20,8 +20,11 @@ import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.Cookie;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,11 +35,30 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
+@ConfigurationProperties(prefix = "spring.shiro")
 public class ShiroConfig {
 
     //session 过期时间
-    @Value("${spring.shiro.globalSessionTimeout}")
     private Long globalSessionTimeout;
+
+    private String cookieName;
+
+
+    public Long getGlobalSessionTimeout() {
+        return globalSessionTimeout;
+    }
+
+    public void setGlobalSessionTimeout(Long globalSessionTimeout) {
+        this.globalSessionTimeout = globalSessionTimeout;
+    }
+
+    public String getCookieName() {
+        return cookieName;
+    }
+
+    public void setCookieName(String cookieName) {
+        this.cookieName = cookieName;
+    }
 
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -127,7 +149,7 @@ public class ShiroConfig {
      */
 
     @Bean
-    public DefaultWebSessionManager sessionManager(RedisShiroSessionDao redisShiroSessionDao,SessionFactory sessionFactory){
+    public DefaultWebSessionManager sessionManager(RedisShiroSessionDao redisShiroSessionDao,SessionFactory sessionFactory,Cookie cookie ){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 
         //注入 sessionDao
@@ -144,8 +166,25 @@ public class ShiroConfig {
             sessionManager.setGlobalSessionTimeout(this.globalSessionTimeout);
         }
 
+        //设置cookie 模板
+        sessionManager.setSessionIdCookie(cookie);
+
         return sessionManager;
     }
+
+    @Bean
+    public Cookie cookie(){
+        SimpleCookie cookie = new SimpleCookie();
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(-1);
+        if(this.cookieName==null){
+            cookie.setName("default_manager");
+        }else {
+            cookie.setName(cookieName);
+        }
+        return cookie;
+    }
+
     @Bean
     public SessionIdGenerator sessionIdGenerator(){
         return new JavaUuidSessionIdGenerator();

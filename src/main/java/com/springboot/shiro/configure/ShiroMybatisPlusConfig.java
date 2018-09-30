@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Configuration
 @MapperScan("com.springboot.shiro.mapper")
-public class MybatisPlusConfig {
+public class ShiroMybatisPlusConfig {
 
     /**
      * 分页插件

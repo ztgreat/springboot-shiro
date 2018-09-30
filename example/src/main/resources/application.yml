@@ -24,11 +24,10 @@ spring:
          # 8小时   8*60*60*1000 =28800000
          # 1分钟   1*60*1000 = 60000
          globalSessionTimeout: 28800000
-
          cookieName: "default_manager"
 
 
 # mybatis plus
 mybatis-plus:
          config-location: classpath:mybatis/mybatis-config.xml
-         mapper-locations: classpath:com/springboot/shiro/mapper/xml/*.xml
+         mapper-locations: classpath*:com/springboot/shiro/mapper/xml/*.xml,classpath*:com/example/demo/mapper/xml/*.xml

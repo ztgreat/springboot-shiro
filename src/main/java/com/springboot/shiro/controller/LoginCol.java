@@ -30,14 +30,6 @@ public class LoginCol {
 	@Autowired
 	private SysRoleService sysRoleService;
 
-	@RequestMapping(value = "/api/login", method = RequestMethod.GET)
-	public String login(javax.servlet.http.HttpServletRequest request) {
-		UserToken token = TokenManager.getToken();
-		if (token != null) {
-			return "redirect:/order/list";
-		}
-		return "login";
-	}
 
 	// 登录
 	@RequestMapping(value = "/api/login", method = RequestMethod.POST)
