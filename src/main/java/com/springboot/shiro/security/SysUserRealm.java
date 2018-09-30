@@ -88,7 +88,7 @@ public class SysUserRealm extends AuthorizingRealm{
         UserToken principal=new UserToken(user);
         
 
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+        RedisSimpleAuthenticationInfo authenticationInfo = new RedisSimpleAuthenticationInfo(
         		principal, //principal
                 user.getPassword(), //密码作为凭证
                 getName()  //realm name

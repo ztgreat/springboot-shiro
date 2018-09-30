@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -21,7 +22,8 @@ public class RedisConfig {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory jedisConnectionFactory) {
         RedisTemplate redisTemplate = new RedisTemplate();
         redisTemplate.setConnectionFactory(jedisConnectionFactory);
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+
+
 
         // <1> 修改Jackson序列化时的默认行为
         ObjectMapper objectMapper = new ObjectMapper();
@@ -29,12 +31,13 @@ public class RedisConfig {
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+//        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
 
         // <2> 手动指定RedisTemplate的Key和Value的序列化器
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.setValueSerializer(new RedisObjectSerializer());
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+//        redisTemplate.setValueSerializer(new RedisObjectSerializer());
 
         redisTemplate.afterPropertiesSet();
         return redisTemplate;

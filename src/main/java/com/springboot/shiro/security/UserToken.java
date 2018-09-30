@@ -8,9 +8,7 @@ import java.util.Date;
 
 
 public class UserToken implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -54,6 +52,9 @@ public class UserToken implements Serializable {
 	 * 1:有效，0:禁止
 	 */
 	private String status;
+
+	public UserToken() {
+	}
 
 	public UserToken(SysUser user) {
 
@@ -144,5 +145,7 @@ public class UserToken implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+
 
 }
