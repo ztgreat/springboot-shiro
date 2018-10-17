@@ -37,9 +37,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.springboot.shiro</groupId>
-			<artifactId>shiro-spring-boot-starter</artifactId>
-			<version>0.0.1</version>
+			<groupId>com.springboot</groupId>
+			<artifactId>spring-boot-starter-shiro</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 
