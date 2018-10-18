@@ -48,10 +48,12 @@ public class LoginCol {
 			try {
 				sysUserService.updateLoginTime(token.getId());
 
-				List<String> userRoles = sysRoleService.getRoleStrByUserId(token.getId());
+//				List<String> userRoles = sysRoleService.getRoleStrByUserId(token.getId());
 
-				su.setCurrentUser(token);
-				su.setCurrentAuthority(userRoles);
+				su.setId(token.getId());
+				su.setNickname(token.getNickname());
+				su.setUsername(token.getUsername());
+
 			} catch (Exception e) {
 				LoggerUtils.error(getClass(), "更新 系统用户登录时间失败:" + e.getMessage());
 			}

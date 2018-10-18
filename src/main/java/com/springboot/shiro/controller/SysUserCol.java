@@ -61,9 +61,11 @@ public class SysUserCol {
 		SysUserInfo su = new SysUserInfo();
 		UserToken token = TokenManager.getToken();
 		try {
-			List<String> userRoles = sysRoleService.getRoleStrByUserId(token.getId());
-			su.setCurrentUser(token);
-			su.setCurrentAuthority(userRoles);
+			su.setId(token.getId());
+			su.setNickname(token.getNickname());
+			su.setUsername(token.getUsername());
+//			List<String> userRoles = sysRoleService.getRoleStrByUserId(token.getId());
+//			su.setCurrentAuthority(userRoles);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(), "获取登录用户信息失败:" + e.getMessage());
 		}

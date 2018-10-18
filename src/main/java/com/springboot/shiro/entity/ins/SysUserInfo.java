@@ -11,15 +11,62 @@ import java.util.List;
  *
  */
 public class SysUserInfo {
+
+
+	private Integer id;
+
+	/**
+	 * 登录帐号
+	 */
+	private String username;
+
+	/**
+	 * 用户昵称
+	 */
+	private String nickname;
+
+	/**
+	 * 邮箱
+	 */
+	private String email;
+
 	/****
 	 * 当前用户角色信息
 	 */
 	private List<String> currentAuthority;
 
-	/**
-	 * 当前用户信息
-	 */
-	private UserToken currentUser;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public List<String> getCurrentAuthority() {
 		return currentAuthority;
@@ -29,12 +76,5 @@ public class SysUserInfo {
 		this.currentAuthority = currentAuthority;
 	}
 
-	public UserToken getCurrentUser() {
-		return currentUser;
-	}
-
-	public void setCurrentUser(UserToken currentUser) {
-		this.currentUser = currentUser;
-	}
 
 }
