@@ -29,10 +29,18 @@ public class PermissionFilter extends AccessControlFilter {
 		HttpServletRequest httpRequest = ((HttpServletRequest) request);
 		String uri = httpRequest.getRequestURI();// 获取URI
 		String basePath = httpRequest.getContextPath();// 获取basePath
+
+		//去掉请求 参数
+		if(uri!=null){
+			int param = uri.indexOf("?");
+			uri = uri.substring(0,param);
+		}
+
 		if (null != uri && uri.startsWith(basePath)) {
 			uri = uri.replaceFirst(basePath, "");
 		}
 
+		//去掉前缀
 		if(uri.startsWith(this.urlPrefix)){
 			uri = uri.replaceFirst(this.urlPrefix, "");
 		}else {
