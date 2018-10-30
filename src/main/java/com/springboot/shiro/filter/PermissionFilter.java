@@ -33,7 +33,9 @@ public class PermissionFilter extends AccessControlFilter {
 		//去掉请求 参数
 		if(uri!=null){
 			int param = uri.indexOf("?");
-			uri = uri.substring(0,param);
+			if(param>-1){
+				uri = uri.substring(0,param);
+			}
 		}
 
 		if (null != uri && uri.startsWith(basePath)) {
