@@ -5,6 +5,7 @@ import com.springboot.shiro.entity.SysUser;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 public class UserToken implements Serializable {
@@ -52,6 +53,11 @@ public class UserToken implements Serializable {
 	 * 1:有效，0:禁止
 	 */
 	private String status;
+
+	/**
+	 * 用户角色
+	 */
+	private List<UserRole> roles;
 
 	public UserToken() {
 	}
@@ -147,5 +153,11 @@ public class UserToken implements Serializable {
 	}
 
 
+	public List<UserRole> getRoles() {
+		return roles;
+	}
 
+	public void setRoles(List<UserRole> roles) {
+		this.roles = roles;
+	}
 }

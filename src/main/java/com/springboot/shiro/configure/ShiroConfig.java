@@ -43,6 +43,12 @@ public class ShiroConfig {
 
     private String cookieName;
 
+    /**
+     * 资源请求前缀
+     * 例如:/api/menu/list
+     */
+    private String urlPrefix;
+
 
     public Long getGlobalSessionTimeout() {
         return globalSessionTimeout;
@@ -58,6 +64,14 @@ public class ShiroConfig {
 
     public void setCookieName(String cookieName) {
         this.cookieName = cookieName;
+    }
+
+    public String getUrlPrefix() {
+        return urlPrefix;
+    }
+
+    public void setUrlPrefix(String urlPrefix) {
+        this.urlPrefix = urlPrefix;
     }
 
     @Bean
@@ -118,6 +132,7 @@ public class ShiroConfig {
      */
     public AccessControlFilter permissionFilter(){
         PermissionFilter permissionFilter = new PermissionFilter();
+        permissionFilter.setUrlPrefix(this.urlPrefix);
         return permissionFilter;
     }
 

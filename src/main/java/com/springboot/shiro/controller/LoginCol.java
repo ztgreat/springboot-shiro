@@ -27,9 +27,6 @@ import java.util.List;
 public class LoginCol {
 	@Autowired
 	private SysUserService sysUserService;
-	@Autowired
-	private SysRoleService sysRoleService;
-
 
 	// 登录
 	@RequestMapping(value = "/api/login", method = RequestMethod.POST)
@@ -37,26 +34,16 @@ public class LoginCol {
 	public ResponseEntity<SysUserInfo> doLogin(@RequestBody SysUser user, Boolean rememberMe, String captcha,
 											   HttpServletRequest request, RedirectAttributes redirect) {
 		ResponseEntity<SysUserInfo> res = new ResponseEntity<SysUserInfo>();
-		// if (!CaptchaService.validate(captcha, request)) {
-		// res.setFailure("验证码错误");
-		// return res;
-		// }
-		SysUserInfo su = new SysUserInfo();
 		try {
 			TokenManager.login(user, rememberMe);
 			UserToken token = TokenManager.getToken();
+			SysUserInfo su = new SysUserInfo(token);
 			try {
 				sysUserService.updateLoginTime(token.getId());
-
-//				List<String> userRoles = sysRoleService.getRoleStrByUserId(token.getId());
-
-				su.setId(token.getId());
-				su.setNickname(token.getNickname());
-				su.setUsername(token.getUsername());
-
 			} catch (Exception e) {
 				LoggerUtils.error(getClass(), "更新 系统用户登录时间失败:" + e.getMessage());
 			}
+			res.setData(su);
 			res.setSuccess("登录成功");
 		} catch (DisabledAccountException e) {
 			res.setFailure("账号被禁用");
@@ -64,7 +51,6 @@ public class LoginCol {
 			e.printStackTrace();
 			res.setFailure("用户名或密码错误");
 		}
-		res.setData(su);
 		return res;
 	}
 
@@ -72,7 +58,11 @@ public class LoginCol {
 	@ResponseBody
 	public ResponseEntity<String> logout() {
 		ResponseEntity<String> res = new ResponseEntity<String>();
-		TokenManager.logout();
+		try {
+			TokenManager.logout();
+		}catch (Exception ignore){
+
+		}
 		res.setSuccess("登出成功");
 		return res;
 	}

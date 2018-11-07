@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +50,7 @@ public class SysUserRealm extends AuthorizingRealm{
             return  authorizationInfo;
         
         //根据用户ID查询角色（role），放入到Authorization里。
+        //可以直接从token中获取，这里暂从数据库查询
 		List<SysRole> roles = sysRoleService.getRoleByUserId(userId);
 		Set<String> sr=new HashSet<String>();
 		for (SysRole sysRole : roles) {
@@ -86,7 +88,19 @@ public class SysUserRealm extends AuthorizingRealm{
         }
         
         UserToken principal=new UserToken(user);
-        
+
+
+        //将用户角色 放到principal中,方便提取
+        List<SysRole>roles = sysRoleService.getRoleByUserId(user.getId());
+
+        if(roles!=null && roles.size()>0){
+            List<UserRole>userRoles = new ArrayList<>();
+            for(SysRole role:roles){
+                userRoles.add(new UserRole(role));
+            }
+            principal.setRoles(userRoles);
+        }
+
 
         RedisSimpleAuthenticationInfo authenticationInfo = new RedisSimpleAuthenticationInfo(
         		principal, //principal

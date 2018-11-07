@@ -19,7 +19,19 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PermissionFilter extends AccessControlFilter {
 
-	private static  String urlPrefix="/api";
+	/**
+	 * 资源请求前缀
+	 * 例如:/api/menu/list
+	 */
+	private   String urlPrefix;
+
+	public  String getUrlPrefix() {
+		return urlPrefix;
+	}
+
+	public  void setUrlPrefix(String urlPrefix) {
+		this.urlPrefix = urlPrefix;
+	}
 
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
@@ -43,7 +55,7 @@ public class PermissionFilter extends AccessControlFilter {
 		}
 
 		//去掉前缀
-		if(uri.startsWith(this.urlPrefix)){
+		if(this.urlPrefix!=null && uri.startsWith(this.urlPrefix)){
 			uri = uri.replaceFirst(this.urlPrefix, "");
 		}else {
 			return Boolean.FALSE;

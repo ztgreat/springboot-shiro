@@ -7,6 +7,7 @@ import com.springboot.shiro.base.ResponseList;
 import com.springboot.shiro.entity.SysUser;
 import com.springboot.shiro.entity.ins.SysUserInfo;
 import com.springboot.shiro.security.TokenManager;
+import com.springboot.shiro.security.UserRole;
 import com.springboot.shiro.security.UserToken;
 import com.springboot.shiro.service.SysRoleService;
 import com.springboot.shiro.service.SysUserService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +25,7 @@ import java.util.Map;
 /**
  * 系统用户控制层
  *
- * @author lpf
+ * @author ztgreat
  */
 @Controller
 @RequestMapping(value = "/api/admin")
@@ -52,27 +54,6 @@ public class SysUserCol {
 			return users;
 		}
 	}
-
-	// 登录
-	@RequestMapping(value = "/getInfo")
-	@ResponseBody
-	public ResponseEntity<SysUserInfo> getInfo() {
-		ResponseEntity<SysUserInfo> res = new ResponseEntity<SysUserInfo>();
-		SysUserInfo su = new SysUserInfo();
-		UserToken token = TokenManager.getToken();
-		try {
-			su.setId(token.getId());
-			su.setNickname(token.getNickname());
-			su.setUsername(token.getUsername());
-//			List<String> userRoles = sysRoleService.getRoleStrByUserId(token.getId());
-//			su.setCurrentAuthority(userRoles);
-		} catch (Exception e) {
-			LoggerUtils.error(getClass(), "获取登录用户信息失败:" + e.getMessage());
-		}
-		res.setData(su);
-		return res;
-	}
-
 
 	@RequestMapping(value = "saveOrUpdate", method = RequestMethod.POST)
 	@ResponseBody
@@ -127,20 +108,19 @@ public class SysUserCol {
 	}
 
 	/**
-	 * 获取用户信息
-	 * 
-	 * @param id
+	 * 获取登录用户信息
 	 * @return
 	 */
-	@RequestMapping(value = "/query/{id}")
+	@RequestMapping(value = "/query")
 	@ResponseBody
-	public ResponseEntity<SysUser> query(@PathVariable(value = "id") Integer id) {
-		ResponseEntity<SysUser> res = new ResponseEntity<SysUser>();
+	public ResponseEntity<SysUserInfo> query() {
+		ResponseEntity<SysUserInfo> res = new ResponseEntity<SysUserInfo>();
 		try {
-			SysUser user = sysUserService.getById(id);
-			res.setData(user);
-			res.setSuccess();
+			UserToken token =TokenManager.getToken();
+			SysUserInfo su = new SysUserInfo(token);
+			res.setData(su);
 		} catch (Exception e) {
+			LoggerUtils.error(getClass(),"获取用户登录信息失败");
 			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;

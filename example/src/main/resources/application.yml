@@ -26,6 +26,9 @@ spring:
          globalSessionTimeout: 28800000
          cookieName: "default_manager"
 
+         # url 请求前缀
+         urlPrefix: "/api"
+
 
 # mybatis plus
 mybatis-plus:

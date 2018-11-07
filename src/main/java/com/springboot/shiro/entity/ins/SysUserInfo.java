@@ -1,13 +1,16 @@
 package com.springboot.shiro.entity.ins;
 
+import com.springboot.shiro.security.UserRole;
 import com.springboot.shiro.security.UserToken;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * 用户登录后返回实体
  * 
- * @author Administrator
+ * @author ztgreat
  *
  */
 public class SysUserInfo {
@@ -30,11 +33,39 @@ public class SysUserInfo {
 	 */
 	private String email;
 
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+
+	/**
+	 * 最后登录时间
+	 */
+	private Date lastLoginTime;
+
+
 	/****
 	 * 当前用户角色信息
 	 */
 	private List<String> currentAuthority;
 
+	public SysUserInfo() {
+	}
+
+	public SysUserInfo(UserToken token) {
+
+		List<String> userRole = new ArrayList<String>();
+		for (UserRole sr : token.getRoles()) {
+			userRole.add(sr.getCode());
+		}
+		this.setId(token.getId());
+		this.setNickname(token.getNickname());
+		this.setUsername(token.getUsername());
+		this.setEmail(token.getEmail());
+		this.setCreateTime(token.getCreateTime());
+		this.setLastLoginTime(token.getLastLoginTime());
+		this.setCurrentAuthority(userRole);
+	}
 
 	public Integer getId() {
 		return id;
@@ -76,5 +107,19 @@ public class SysUserInfo {
 		this.currentAuthority = currentAuthority;
 	}
 
+	public Date getCreateTime() {
+		return createTime;
+	}
 
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(Date lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
 }
