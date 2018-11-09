@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50615
 File Encoding         : 65001
 
-Date: 2018-09-30 16:52:21
+Date: 2018-11-09 18:18:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,8 +44,6 @@ INSERT INTO `sys_menu` VALUES ('4', '资源权限', '1', '2', 'auth', '1', '2017
 INSERT INTO `sys_menu` VALUES ('5', '系统用户', '1', '1', 'admin', '1', '2017-11-24 16:48:59', '2018-07-19 14:54:01', '&#xe613;', 'list', '0');
 INSERT INTO `sys_menu` VALUES ('6', '角色管理', '1', '2', 'admin', '1', '2017-11-24 16:48:59', '2018-07-25 20:16:54', '&#xe63c;', 'role/list', '3');
 INSERT INTO `sys_menu` VALUES ('7', '角色分配', '1', '2', 'admin', '1', '2017-11-24 16:48:59', '2018-07-25 20:17:04', '&#xe63c;', 'role/allocation', '4');
-INSERT INTO `sys_menu` VALUES ('53', '用户管理', '0', '0', '#', '1', '2018-05-08 16:43:58', '2018-07-19 16:58:29', 'user', 'normal_user', '5');
-INSERT INTO `sys_menu` VALUES ('54', '用户列表', '1', '53', '#', '1', '2018-05-08 16:44:28', '2018-07-19 14:54:43', '&#xe63c;', 'list', '0');
 INSERT INTO `sys_menu` VALUES ('76', 'DashBoard', '0', '0', 'dashBoard', '1', '2018-07-19 16:52:59', '2018-07-26 12:34:34', 'desktop', 'home', '1');
 INSERT INTO `sys_menu` VALUES ('77', '博客管理', '0', '0', '#', '1', '2018-08-16 19:42:07', '2018-08-16 19:42:07', 'folder', 'blog', '6');
 INSERT INTO `sys_menu` VALUES ('79', '博客分类', '1', '77', '#', '1', '2018-08-17 10:12:56', '2018-08-17 10:12:56', 'appstore-o', 'category', '0');
@@ -218,7 +216,7 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', 'admin', 'admin@shop.com', '12345678958', '5a55d78af3a2929cfad9545fe087825d0d29ff270ca34cd6676cfe7e38175998b84318077c9f97757f2ca11a6eae4f255b8e7d9945ac18e3dd35d6f717d3b1e9', '2017-06-16 11:15:33', '2018-07-20 14:36:26', '2018-09-30 15:18:57', '1');
+INSERT INTO `sys_user` VALUES ('1', 'admin', 'admin', 'admin@shop.com', '12345678958', '5a55d78af3a2929cfad9545fe087825d0d29ff270ca34cd6676cfe7e38175998b84318077c9f97757f2ca11a6eae4f255b8e7d9945ac18e3dd35d6f717d3b1e9', '2017-06-16 11:15:33', '2018-07-20 14:36:26', '2018-11-09 10:15:32', '1');
 INSERT INTO `sys_user` VALUES ('71', 'zt', 'zt1', 'zt@qq.com', '12365987458', '2f2fa5372063be3d6401c40c065645a5faaacd2ad71c4684f13b5b0408b79989a6fbf27f343fe31c378554d99b2cca479ccfcd2896ba8b8a7cd00f7de5c08b3d', '2018-02-06 17:57:25', '2018-07-20 15:39:28', '2018-07-20 14:42:29', '1');
 
 -- ----------------------------
@@ -234,7 +232,7 @@ CREATE TABLE `sys_user_role` (
   KEY `user_id` (`user_id`) USING BTREE,
   CONSTRAINT `sys_user_role_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`),
   CONSTRAINT `sys_user_role_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_user_role

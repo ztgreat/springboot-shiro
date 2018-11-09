@@ -3,8 +3,8 @@ server:
 spring:
        # jdbc
        datasource:
-          driverClassName: com.mysql.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/shiro?useUnicode=true&characterEncoding=utf-8
+          driverClassName: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/shiro?serverTimezone=GMT&useUnicode=true&characterEncoding=utf-8
           username: root
           password: root
        # redis
