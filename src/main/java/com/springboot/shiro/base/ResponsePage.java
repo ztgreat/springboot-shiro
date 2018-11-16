@@ -4,9 +4,6 @@ import java.util.List;
 
 /**
  * 前端返回列表分页对象等
- * 
- * @author Administrator
- *
  * @param <T>
  */
 public class ResponsePage<T> extends BaseResponseEntity {

@@ -1,9 +1,9 @@
 package com.springboot.shiro.entity.ins;
 
 
-import com.springboot.shiro.base.Tree;
+import com.springboot.shiro.base.ResponseTree;
 
-public class PermissionTreeIns extends Tree<PermissionTreeIns> {
+public class PermissionTreeIns extends ResponseTree<PermissionTreeIns> {
 
 
 	

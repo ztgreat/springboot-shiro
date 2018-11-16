@@ -3,18 +3,20 @@ package com.springboot.shiro.base;
 
 public abstract class BaseResponseEntity {
 
-	public BaseResponseEntity() {
-		this.code = CommonConstant.ZERO;
-	}
+
 
 	/**
 	 * 0：成功 1：失败
 	 */
-	private String code;
+	private String code=CommonConstant.ZERO;
 	/**
 	 * 返回的消息
 	 */
 	private String msg;
+
+	public BaseResponseEntity() {
+		this.code = CommonConstant.ZERO;
+	}
 
 	/**
 	 * 成功

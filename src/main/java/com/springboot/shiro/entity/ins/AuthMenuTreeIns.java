@@ -1,13 +1,13 @@
 package com.springboot.shiro.entity.ins;
 
-import com.springboot.shiro.base.Tree;
+import com.springboot.shiro.base.ResponseTree;
 
 import java.util.Date;
 
 /**
  * 菜单树
  */
-public class AuthMenuTreeIns extends Tree<AuthMenuTreeIns> {
+public class AuthMenuTreeIns extends ResponseTree<AuthMenuTreeIns> {
 	
 	
 	

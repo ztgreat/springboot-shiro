@@ -1,7 +1,9 @@
 package com.springboot.shiro.base;
 
-
-// 返回上传图片的信息
+/**
+ * 后台或者前台返回的统一对象(图片类)
+ * @param <T>
+ */
 public class ResponseImage {
 
 	private String code;
@@ -15,8 +17,6 @@ public class ResponseImage {
 	private String status;
 	
 	private String url;
-	
-	
 
 	public ResponseImage() {
 		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
@@ -38,18 +38,14 @@ public class ResponseImage {
 		this.msg = msg;
 	}
 
-
 	public void setSuccess(String msg) {
 		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
 		this.msg = msg;
 	}
-
 	public void setFailure(String msg) {
 		this.code = CommonConstant.ServerCode.SERVER_RET_FAILER;
 		this.msg = msg;
 	}
-
-
 	public String getName() {
 		return name;
 	}
@@ -81,6 +77,4 @@ public class ResponseImage {
 	public void setUid(int uid) {
 		this.uid = uid;
 	}
-	
-	
 }

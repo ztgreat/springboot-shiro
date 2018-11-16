@@ -2,9 +2,9 @@ package com.springboot.shiro.base;
 
 import java.util.List;
 /**
- * 菜单树
+ * 树型数据
  */
-public class Tree<T> {
+public class ResponseTree<T> {
 	
 	
 	private Integer id;
