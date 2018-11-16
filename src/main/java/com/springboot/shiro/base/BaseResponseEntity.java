@@ -1,8 +1,11 @@
 package com.springboot.shiro.base;
 
 
-public abstract class BaseResponseEntity {
+import java.io.Serializable;
 
+public abstract class BaseResponseEntity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 
 	/**

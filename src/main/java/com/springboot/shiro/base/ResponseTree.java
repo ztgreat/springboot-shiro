@@ -1,10 +1,11 @@
 package com.springboot.shiro.base;
 
 import java.util.List;
+
 /**
  * 树型数据
  */
-public class ResponseTree<T> {
+public class ResponseTree<T> extends BaseResponseEntity{
 	
 	
 	private Integer id;
@@ -19,6 +20,8 @@ public class ResponseTree<T> {
 	
     private	List<T> children;
 
+	public ResponseTree() {
+	}
 
 	public List<T> getChildren() {
 		return children;
