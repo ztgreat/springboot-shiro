@@ -7,6 +7,7 @@ import com.springboot.shiro.entity.SysUser;
 import com.springboot.shiro.service.SysPermissionService;
 import com.springboot.shiro.service.SysRoleService;
 import com.springboot.shiro.service.SysUserService;
+import com.springboot.shiro.util.LoggerUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -44,7 +45,12 @@ public class SysUserRealm extends AuthorizingRealm{
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         UserToken token= (UserToken) principalCollection.getPrimaryPrincipal();
-        Integer userId = TokenManager.getUserId();
+        Integer userId = null;
+        try {
+            userId=TokenManager.getUserId();
+        } catch (Exception e) {
+            LoggerUtils.error(getClass(),"获取登录用户信息失败:"+e.getMessage());
+        }
         SimpleAuthorizationInfo authorizationInfo=new SimpleAuthorizationInfo();
         if (userId==null)
             return  authorizationInfo;
