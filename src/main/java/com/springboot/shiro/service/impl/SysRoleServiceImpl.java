@@ -134,8 +134,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return SingleUserRoleAllocationBo
      */
     public List<SingleUserRolesBoIns> queryRoleAllocationByUserId(String userId) {
-        List<SingleUserRolesBoIns> singleUserRolesBos = new ArrayList<SingleUserRolesBoIns>();
-        singleUserRolesBos = sysRoleMapper.queryRoleAllocationByUserId(userId);
+        List<SingleUserRolesBoIns> singleUserRolesBos = sysRoleMapper.queryRoleAllocationByUserId(userId);
         return singleUserRolesBos;
     }
 

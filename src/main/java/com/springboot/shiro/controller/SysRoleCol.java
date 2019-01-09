@@ -178,15 +178,13 @@ public class SysRoleCol {
 
 		ResponseList<SingleUserRolesBoIns> res=new ResponseList<SingleUserRolesBoIns>();
 		try {
-			List<SingleUserRolesBoIns> singleUserRoleAllocationBos = new ArrayList<SingleUserRolesBoIns>();
-			singleUserRoleAllocationBos = sysRoleService.queryRoleAllocationByUserId(userId);
+			List<SingleUserRolesBoIns> singleUserRoleAllocationBos = sysRoleService.queryRoleAllocationByUserId(userId);
 			res.setData(singleUserRoleAllocationBos);
 			} catch (RuntimeException e) {
 				res.setFailure(CommonConstant.Message.OPTION_FAILURE);
 				LoggerUtils.error(getClass(),"[querySingleUserRole]" + e.getMessage());
 			}
 		return res;
-
 	}
 	
 	/**
