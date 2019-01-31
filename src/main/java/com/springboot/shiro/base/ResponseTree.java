@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 树型数据
  */
-public class ResponseTree<T> extends BaseResponseEntity{
+public class ResponseTree<T>{
 	
 	
 	private Integer id;

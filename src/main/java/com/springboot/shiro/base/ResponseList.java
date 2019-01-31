@@ -3,54 +3,70 @@ package com.springboot.shiro.base;
 import java.util.List;
 
 /**
- * 后台或者前台返回的统一对象
+ * 列表数据返回
  * @param <T>
  */
-public class ResponseList<T> extends BaseResponseEntity {
+public class ResponseList<T> {
 
-	private Long count;
+	private String code;
+	private String msg;
 	private List<T> data;
-	private int size;
 
 	public ResponseList() {
-
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+	}
+	public ResponseList(String msg) {
+		this.msg=msg;
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+	}
+	public ResponseList(List<T> t) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		this.setData(t);
+	}
+	public ResponseList self(){
+		return this;
 	}
 
-	public ResponseList(List<T> t, Long total) {
-		super.setSuccess();
-		this.setData(t);
-		this.setCount(total);
+	public String getCode() {
+		return code;
 	}
 
-	public ResponseList(List<T> t, Long total, int size) {
-		super.setSuccess();
-		this.setData(t);
-		this.setCount(total);
-		this.setSize(size);
+	public String getMsg() {
+		return msg;
+	}
+
+	public ResponseList setMsg(String msg) {
+		this.msg = msg;
+		return self();
 	}
 
 	public List<T> getData() {
 		return data;
 	}
 
-	public void setData(List<T> data) {
+	public ResponseList setData(List<T> data) {
 		this.data = data;
+		return self();
 	}
 
-	public Long getCount() {
-		return count;
+	public ResponseList success(String msg) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		this.msg = msg;
+		return self();
+	}
+	public ResponseList success() {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		return self();
 	}
 
-	public void setCount(Long count) {
-		this.count = count;
+	public ResponseList failure(String msg) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_FAILER;
+		this.msg = msg;
+		return self();
 	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
+	public ResponseList failure() {
+		this.code = CommonConstant.ServerCode.SERVER_RET_FAILER;
+		return self();
 	}
 
 }

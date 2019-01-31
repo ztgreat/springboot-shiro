@@ -98,7 +98,7 @@ public class PermissionFilter extends AccessControlFilter {
 			// 如果是ajax请求，返回页面提示信息
 			if (ShiroFilterUtils.isAjax(request)) {
 				ResponseEntity<String> res = new ResponseEntity<String>();
-				res.setFailure(CommonConstant.Message.OPTION_FAILURE_NO_PERMISSION);
+				res.failure(CommonConstant.Message.OPTION_FAILURE_NO_PERMISSION);
 				ShiroFilterUtils.out401(response, res, HttpServletResponse.SC_FORBIDDEN);
 			} else {
 //				if (org.apache.shiro.util.StringUtils.hasText(ShiroFilterUtils.UNAUTHORIZED)) {// 如果有未授权页面跳转过去

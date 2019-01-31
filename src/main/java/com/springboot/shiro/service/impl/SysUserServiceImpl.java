@@ -44,9 +44,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         QueryWrapper<SysUser>wrapper = new QueryWrapper<>();
         if (StringUtils.isNoneEmpty(search)) {
-            wrapper .like(true,"username", "%"+search+"%")
-                    .like(true,"nickname", "%"+search+"%")
-                    .like(true,"email", "%"+search+"%")
+            wrapper .like(true,"username", "%"+search+"%").or()
+                    .like(true,"nickname", "%"+search+"%").or()
+                    .like(true,"email", "%"+search+"%").or()
                     .like(true,"telephone", "%"+search+"%");
         }
         Page<SysUser>page = new Page<>(pageNum,pageSize);

@@ -31,6 +31,28 @@ public class SysMenuCol {
 	private SysMenuService sysMenuService;
 
 
+	/**
+	 * 获取所有菜单tree
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/getMenuTree", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseList<AuthMenuTreeIns> getMenuTree() {
+		ResponseList<AuthMenuTreeIns> res = new ResponseList<AuthMenuTreeIns>();
+		List<AuthMenuTreeIns> menus = null;
+		try {
+			menus = sysMenuService.getMenuTree(0);
+			setMenuTree(menus, null);
+			res.setData(menus);
+		} catch (Exception e) {
+			LoggerUtils.error(getClass(), "获取菜单树 失败:" + e.getMessage());
+			res.failure(e.getMessage());
+		}
+		return res;
+	}
+
+
 	// 保存
 	@RequestMapping(value = "/saveOrUpdate", method = RequestMethod.POST)
 	@ResponseBody
@@ -39,10 +61,10 @@ public class SysMenuCol {
 		try {
 
 			String s = sysMenuService.saveMenu(menu);
-			res.setSuccess(s);
+			res.success(s);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(), "菜单保存失败:" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}
@@ -54,11 +76,11 @@ public class SysMenuCol {
 		ResponseEntity<String> res = new ResponseEntity<String>();
 		try {
 			boolean flag = sysMenuService.removeById(id);
+			res.success("删除成功");
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(), "菜单删除失败:" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
-		res.setSuccess("删除成功");
 		return res;
 
 	}
@@ -79,31 +101,12 @@ public class SysMenuCol {
 			res.setData(menus);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(), "通过用户id 获取用户菜单树 失败:" + e.getMessage());
-			res.setFailure(e.getMessage());
+			res.failure(e.getMessage());
 		}
 		return res;
 	}
 
-	/**
-	 * 获取所有菜单tree
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/getMenuTree", method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseList<AuthMenuTreeIns> getMenuTree() {
-		ResponseList<AuthMenuTreeIns> res = new ResponseList<AuthMenuTreeIns>();
-		List<AuthMenuTreeIns> menus = null;
-		try {
-			menus = sysMenuService.getMenuTree(0);
-			setMenuTree(menus, null);
-			res.setData(menus);
-		} catch (Exception e) {
-			LoggerUtils.error(getClass(), "获取菜单树 失败:" + e.getMessage());
-			res.setFailure(e.getMessage());
-		}
-		return res;
-	}
+
 
 	/**
 	 * 批量删除
@@ -117,10 +120,10 @@ public class SysMenuCol {
 		List<String> ids = (List<String>) param.get("ids");
 		try {
 			sysMenuService.deleteBatch(ids);
-			res.setSuccess(CommonConstant.Message.OPTION_SUCCESS);
+			res.success(CommonConstant.Message.OPTION_SUCCESS);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(), "批量删除菜单失败:" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}

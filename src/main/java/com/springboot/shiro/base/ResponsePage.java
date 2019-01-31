@@ -1,71 +1,143 @@
 package com.springboot.shiro.base;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
 import java.util.List;
 
 /**
- * 前端返回列表分页对象等
- * @param <T>
+ * 列表分页对象
  */
-public class ResponsePage<T> extends BaseResponseEntity {
+public class ResponsePage<T> {
 
-	private List<T> list;
+	/**
+	 * 0 成功
+	 */
+	private String code;
+
+	/**
+	 * 字符信息
+	 */
+	private String msg;
+
+	/**
+	 * 数据
+	 */
+	private List<T> data;
+
+	/**
+	 * 当前页
+	 */
+	private Long current;
+
+	/**
+	 * 每页大小
+	 */
+	private Long pageSize;
+
+	/**
+	 * 数据总数
+	 */
 	private Long total;
-	private Integer page;
-	private Integer limit;
-	private Boolean isNextPage;
 
-
+	/**
+	 * 默认是成功状态
+	 */
 	public ResponsePage() {
-	}
-	public ResponsePage(List<T> list, Long total, Integer page, Integer limit) {
-		this.limit = limit;
-		this.list = list;
-		this.page = page;
-		this.total = total;
-	}
-	public ResponsePage(List<T> list, Long total) {
-		this.list = list;
-		this.total = total;
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
 	}
 
-	public List<T> getList() {
-		return list;
+	public ResponsePage(IPage page) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		this.current=page.getCurrent();
+		this.pageSize=page.getSize();
+		this.total=page.getTotal();
+		this.data=page.getRecords();
 	}
 
-	public void setList(List<T> list) {
-		this.list = list;
+	/**
+	 * 默认是成功状态
+	 * @param msg
+	 */
+	public ResponsePage(String msg) {
+		this.msg=msg;
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+	}
+
+	public ResponsePage self(){
+		return this;
+	}
+
+	public ResponsePage setPage(IPage page) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		this.current=page.getCurrent();
+		this.pageSize=page.getSize();
+		this.total=page.getTotal();
+		this.data=page.getRecords();
+		return self();
+	}
+
+	public ResponsePage success(String msg) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		this.msg = msg;
+		return self();
+	}
+	public ResponsePage success() {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		return self();
+	}
+
+	public ResponsePage failure(String msg) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_FAILER;
+		this.msg = msg;
+		return self();
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public ResponsePage setMsg(String msg) {
+		this.msg = msg;
+		return self();
+	}
+
+	public List<T> getData() {
+		return data;
+	}
+
+	public ResponsePage setData(List<T> data) {
+		this.data = data;
+		return self();
+	}
+
+	public Long getCurrent() {
+		return current;
+	}
+
+	public ResponsePage setCurrent(Long current) {
+		this.current = current;
+		return self();
+	}
+
+	public Long getPageSize() {
+		return pageSize;
+	}
+
+	public ResponsePage setPageSize(Long pageSize) {
+		this.pageSize = pageSize;
+		return self();
 	}
 
 	public Long getTotal() {
 		return total;
 	}
 
-	public void setTotal(Long total) {
+	public ResponsePage setTotal(Long total) {
 		this.total = total;
+		return self();
 	}
-
-	public Integer getPage() {
-		return page;
-	}
-
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-
-	public Integer getLimit() {
-		return limit;
-	}
-
-	public void setLimit(Integer limit) {
-		this.limit = limit;
-	}
-
-	public Boolean getIsNextPage() {
-		return isNextPage;
-	}
-
-	public void setIsNextPage(Boolean isNextPage) {
-		this.isNextPage = isNextPage;
-	}
-
 }

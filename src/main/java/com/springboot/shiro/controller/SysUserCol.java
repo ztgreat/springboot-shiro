@@ -3,11 +3,10 @@ package com.springboot.shiro.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.springboot.shiro.base.CommonConstant;
 import com.springboot.shiro.base.ResponseEntity;
-import com.springboot.shiro.base.ResponseList;
+import com.springboot.shiro.base.ResponsePage;
 import com.springboot.shiro.entity.SysUser;
 import com.springboot.shiro.entity.ins.SysUserInfo;
 import com.springboot.shiro.security.TokenManager;
-import com.springboot.shiro.security.UserRole;
 import com.springboot.shiro.security.UserToken;
 import com.springboot.shiro.service.SysRoleService;
 import com.springboot.shiro.service.SysUserService;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,19 +36,17 @@ public class SysUserCol {
 
 	@RequestMapping(value = "page", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseList<SysUser> page(@RequestParam(value = "current", defaultValue = "1") int current,
+	public ResponsePage<SysUser> page(@RequestParam(value = "current", defaultValue = "1") int current,
 									  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
 									  @RequestParam(value = "search", defaultValue = "") String search,
 									  @RequestParam(value = "status", defaultValue = "") String status) {
-		ResponseList<SysUser> users = new ResponseList<SysUser>();
+		ResponsePage<SysUser> users = new ResponsePage<SysUser>();
 		try {
-			IPage<SysUser> p = sysUserService.page(current, pageSize, search);
-			users.setData(p.getRecords());
-			users.setCount(p.getTotal());
-			return users;
+			IPage<SysUser> page = sysUserService.page(current, pageSize, search);
+			return users.setPage(page);
 		} catch (RuntimeException e) {
 			LoggerUtils.error(getClass(),"[sysUser page]" + e.getMessage());
-			users.setFailure("获取失败");
+			users.failure("获取失败");
 			return users;
 		}
 	}
@@ -98,10 +94,10 @@ public class SysUserCol {
 		try {
 			List<Integer> ids = (List<Integer>) param.get("ids");
 			String msg = sysUserService.delete(ids);
-			res.setSuccess(msg);
+			res.success(msg);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"[ sysuser delete]" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 
@@ -121,7 +117,7 @@ public class SysUserCol {
 			res.setData(su);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"获取用户登录信息失败");
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}

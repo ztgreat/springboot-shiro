@@ -2,53 +2,83 @@ package com.springboot.shiro.base;
 
 
 /**
- * 后台或者前台返回的统一对象(图片信息)
- */
-public class ResponseImage extends BaseResponseEntity{
+ * 返回上传图片的信息
+*/
+public class ResponseImage {
 
+	private String code;
 
-	private int uid;
-	
+	private String msg;
+
+	private String originalName;
+
 	private String name;
-	
-	private String status;
-	
-	private String url;
+
+	private String path;
 
 	public ResponseImage() {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+	}
+
+	public ResponseImage self(){
+		return this;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public ResponseImage setMsg(String msg) {
+		this.msg = msg;
+		return self();
+	}
+
+	public ResponseImage success(String msg) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		this.msg = msg;
+		return self();
+	}
+
+	public ResponseImage success() {
+		this.code = CommonConstant.ServerCode.SERVER_RET_SUSSCESS;
+		return self();
+	}
+
+	public ResponseImage failure(String msg) {
+		this.code = CommonConstant.ServerCode.SERVER_RET_FAILER;
+		this.msg = msg;
+		return self();
+	}
+
+	public String getOriginalName() {
+		return originalName;
+	}
+
+	public ResponseImage setOriginalName(String originalName) {
+		this.originalName = originalName;
+		return self();
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public ResponseImage setName(String name) {
 		this.name = name;
+		return self();
 	}
 
-	public String getStatus() {
-		return status;
+	public String getPath() {
+		return path;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public ResponseImage setPath(String path) {
+		this.path = path;
+		return self();
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public int getUid() {
-		return uid;
-	}
-
-	public void setUid(int uid) {
-		this.uid = uid;
-	}
-	
-	
 }

@@ -34,7 +34,7 @@ public class LoginFilter extends AccessControlFilter {
 		// saveRequestAndRedirectToLogin(request, response);
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		ResponseEntity<String> res = new ResponseEntity<String>();
-		res.setFailure("您还没有登录");
+		res.failure("您还没有登录");
 		ShiroFilterUtils.out401(response, res, HttpServletResponse.SC_UNAUTHORIZED);
 		return Boolean.FALSE;
 	}

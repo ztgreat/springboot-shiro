@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.springboot.shiro.base.CommonConstant;
 import com.springboot.shiro.base.ResponseEntity;
 import com.springboot.shiro.base.ResponseList;
+import com.springboot.shiro.base.ResponsePage;
 import com.springboot.shiro.entity.SysMenu;
 import com.springboot.shiro.entity.SysPermission;
 import com.springboot.shiro.entity.SysRole;
@@ -15,14 +16,11 @@ import com.springboot.shiro.service.SysMenuService;
 import com.springboot.shiro.service.SysPermissionService;
 import com.springboot.shiro.service.SysRoleService;
 import com.springboot.shiro.util.LoggerUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +46,11 @@ public class SysRoleCol {
 	// 查询
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseList<SysRole> page(@RequestParam(value = "current", defaultValue = "1") int current,
+	public ResponsePage<SysRole> page(@RequestParam(value = "current", defaultValue = "1") int current,
 									  @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 									  @RequestParam(value = "search", defaultValue = "") String search) {
 		IPage<SysRole> page = sysRoleService.page(current, pageSize, search);
-		ResponseList<SysRole> res = new ResponseList<SysRole>(page.getRecords(), page.getTotal());
+		ResponsePage<SysRole> res = new ResponsePage<SysRole>(page);
 		return res;
 	}
 
@@ -65,10 +63,10 @@ public class SysRoleCol {
 
 		try {
 			String s = sysRoleService.saveRole(role);
-			res.setSuccess(s);
+			res.success(s);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"[角色更新或者删除]" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}
@@ -84,16 +82,16 @@ public class SysRoleCol {
 				//删除角色前需确定该角色是否已被分配权限，如已分配需先解除角色权限关系
 				int permissionCount = sysRoleService.queryPerAllocationNumOfRole(id.intValue());
 				if (permissionCount>0) {
-					res.setFailure(CommonConstant.Message.ROLE_EXIST_PERMISSION);
+					res.failure(CommonConstant.Message.ROLE_EXIST_PERMISSION);
 				}else {
 					sysRoleService.removeById(id);
-					res.setSuccess(CommonConstant.Message.OPTION_SUCCESS);
+					res.success(CommonConstant.Message.OPTION_SUCCESS);
 				}
 			}
 			
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"[role delete]" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 
@@ -106,11 +104,11 @@ public class SysRoleCol {
 		ResponseEntity<SysRole> res = new ResponseEntity<>();
 		try {
 			SysRole role=sysRoleService.getById(id);
-			res.setSuccess(CommonConstant.Message.OPTION_SUCCESS);
+			res.success(CommonConstant.Message.OPTION_SUCCESS);
 			res.setData(role);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"[role get]" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}
@@ -124,25 +122,24 @@ public class SysRoleCol {
 	 * @param order 支持排序
 	 * @return 
 	 */
-	@RequestMapping(value = "/listAllUserRoles", method = RequestMethod.GET)
+	@RequestMapping(value = "/pageUserRoles", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseList<UserRoleAllocationBoIns> listAllUserRoles(@RequestParam(value = "current", defaultValue = "1") int current,
+	public ResponsePage<UserRoleAllocationBoIns> pageUserRoles(@RequestParam(value = "current", defaultValue = "1") int current,
 																  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
 																  @RequestParam(value = "search", defaultValue = "") String search,
 																  @RequestParam(value = "order", defaultValue = "") String order) {
+		ResponsePage<UserRoleAllocationBoIns> res = new ResponsePage<UserRoleAllocationBoIns>();
 		try {
 				IPage<UserRoleAllocationBoIns> page = sysRoleService.queryUserRoleByPage(search, current, pageSize, order);
-				ResponseList<UserRoleAllocationBoIns> res = new ResponseList<UserRoleAllocationBoIns>(page.getRecords(), page.getTotal());
-				
 				for(UserRoleAllocationBoIns userRoleAllocationBo:page.getRecords()){
 					userRoleAllocationBo.roleVerToHor();   //查询结果行专列
 				}
+				res.setPage(page);
 				return res;
 			} catch (RuntimeException e) {
-				LoggerUtils.error(getClass(),"[sya listAllUserRoles]" + e.getMessage());
+				LoggerUtils.error(getClass(),"[sysrole pageUserRoles]" + e.getMessage());
 			}
-		ResponseList<UserRoleAllocationBoIns> res = new ResponseList();
-		res.setFailure("获取列表失败");
+		res.failure("获取列表失败");
 		return res;
 	}
 	
@@ -181,7 +178,7 @@ public class SysRoleCol {
 			List<SingleUserRolesBoIns> singleUserRoleAllocationBos = sysRoleService.queryRoleAllocationByUserId(userId);
 			res.setData(singleUserRoleAllocationBos);
 			} catch (RuntimeException e) {
-				res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+				res.failure(CommonConstant.Message.OPTION_FAILURE);
 				LoggerUtils.error(getClass(),"[querySingleUserRole]" + e.getMessage());
 			}
 		return res;
@@ -199,10 +196,10 @@ public class SysRoleCol {
 		ResponseEntity<String> res = new ResponseEntity<>();
 		try {
 			sysRoleService.deleteAllRoleByUserId(userId);
-			res.setSuccess(CommonConstant.Message.OPTION_SUCCESS);
+			res.success(CommonConstant.Message.OPTION_SUCCESS);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"[role get]" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}
@@ -232,7 +229,7 @@ public class SysRoleCol {
 			res.setData(permissionTrees);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"[role gePermissionTree]" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}
@@ -280,7 +277,7 @@ public class SysRoleCol {
 			res.setData(menus);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(), "通过角色id 获取菜单树失败 :"+e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		
 		return res;
@@ -320,10 +317,10 @@ public class SysRoleCol {
 		
 		try {
 			sysMenuService.updatePermission(roleId,menusIds);
-			res.setSuccess(CommonConstant.Message.OPTION_SUCCESS);
+			res.success(CommonConstant.Message.OPTION_SUCCESS);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(), "更新菜单权限失败 :"+e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}
@@ -341,10 +338,10 @@ public class SysRoleCol {
 		List<Integer> permissionIds=  (List<Integer>) param.get("permissionIds");
 		try {
 			sysPermissionService.updatePermission(roleId,permissionIds);
-			res.setSuccess(CommonConstant.Message.OPTION_SUCCESS);
+			res.success(CommonConstant.Message.OPTION_SUCCESS);
 		} catch (Exception e) {
 			LoggerUtils.error(getClass(),"[role updatePermission]" + e.getMessage());
-			res.setFailure(CommonConstant.Message.OPTION_FAILURE);
+			res.failure(CommonConstant.Message.OPTION_FAILURE);
 		}
 		return res;
 	}

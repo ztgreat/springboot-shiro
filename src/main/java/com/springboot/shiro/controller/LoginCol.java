@@ -5,7 +5,6 @@ import com.springboot.shiro.entity.SysUser;
 import com.springboot.shiro.entity.ins.SysUserInfo;
 import com.springboot.shiro.security.TokenManager;
 import com.springboot.shiro.security.UserToken;
-import com.springboot.shiro.service.SysRoleService;
 import com.springboot.shiro.service.SysUserService;
 import com.springboot.shiro.util.LoggerUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 登录
@@ -43,13 +41,12 @@ public class LoginCol {
 			} catch (Exception e) {
 				LoggerUtils.error(getClass(), "更新 系统用户登录时间失败:" + e.getMessage());
 			}
-			res.setData(su);
-			res.setSuccess("登录成功");
+			res.setData(su).success("登录成功");
 		} catch (DisabledAccountException e) {
-			res.setFailure("账号被禁用");
+			res.failure("账号被禁用");
 		} catch (Exception e) {
 			e.printStackTrace();
-			res.setFailure("用户名或密码错误");
+			res.failure("用户名或密码错误");
 		}
 		return res;
 	}
@@ -63,7 +60,7 @@ public class LoginCol {
 		}catch (Exception ignore){
 
 		}
-		res.setSuccess("登出成功");
+		res.success("登出成功");
 		return res;
 	}
 
